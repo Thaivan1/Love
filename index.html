@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20-10</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif; 
+            background: linear-gradient(135deg, #FFF1F1, #FFB6C1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            perspective: 1000px; 
+        }
+
+        .card {
+            width: 700px;
+            height: 450px;
+            background-color: #fff;
+            border: 3px solid #FF69B4;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+            animation: pop 0.5s ease-out;
+            z-index: 2;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.5); }
+            100% { transform: scale(1); }
+        }
+
+        .envelope {
+            width: 100%;
+            height: 100%;
+            background-color: #FFF5EE;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 35px solid #FF69B4;
+            transition: transform 0.6s;
+        }
+
+        .envelope.opened .envelope-top {
+            transform: rotateX(180deg);
+        }
+
+        .envelope-top, .envelope-bottom {
+            width: 100%;
+            height: 50%;
+            background-color: #FFF5EE;
+            transition: transform 0.6s ease-out;
+            transform-origin: bottom;
+        }
+
+        .envelope-bottom {
+            position: absolute;
+            bottom: 0;
+        }
+
+        .card h1 {
+            font-size: 3rem;
+            font-family: 'Dancing Script', cursive;
+            color: #C71585;
+            margin-top: 20px;
+        }
+
+        .message {
+            display: none;
+            font-size: 1.5rem;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            border: 3px solid #FF69B4;
+        }
+
+        .modal-content h2 {
+            font-family: 'Dancing Script', cursive;
+            color: #C71585;
+            margin-bottom: 15px;
+        }
+
+        .modal-content p {
+            font-size: 1.3rem;
+            color: #333;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #C71585;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .next-btn:hover {
+            background-color: #FF1493;
+        }
+
+        .special-message {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn.pixabay.com/photo/2017/02/23/13/06/valentine-2098237_1280.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.9;
+            z-index: 4;
+            padding: 20px;
+        }
+
+        .special-message img {
+            max-width: 80%;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* Hiệu ứng trái tim */
+        .heart {
+            position: absolute;
+            color: #FF1493; /* Đổi màu trái tim rõ hơn */
+            font-size: 2rem;
+            animation: float 5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        /* Đặt vị trí cho trái tim và thêm chuyển động xung quanh */
+        .heart1 { top: 10%; left: 10%; animation: float 6s ease-in-out infinite; }
+        .heart2 { top: 15%; left: 70%; animation: float 5s ease-in-out infinite; }
+        .heart3 { top: 30%; left: 20%; animation: float 7s ease-in-out infinite; }
+        .heart4 { top: 25%; left: 60%; animation: float 5.5s ease-in-out infinite; }
+        .heart5 { top: 40%; left: 15%; animation: float 6.5s ease-in-out infinite; }
+        .heart6 { top: 45%; left: 75%; animation: float 5s ease-in-out infinite; }
+        .heart7 { top: 60%; left: 30%; animation: float 6.5s ease-in-out infinite; }
+        .heart8 { top: 55%; left: 50%; animation: float 7s ease-in-out infinite; }
+        .heart9 { top: 70%; left: 10%; animation: float 5s ease-in-out infinite; }
+        .heart10 { top: 80%; left: 60%; animation: float 6s ease-in-out infinite; }
+
+        @media (max-width: 768px) {
+            .card {
+                width: 90%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="envelope" id="open-card">
+            <div class="envelope-top"></div>
+            <div class="envelope-bottom"></div>
+        </div>
+        <h1>Chúc mừng 20-10</h1>
+        <p class="message">Chúc mừng bạn! Nhấp vào thiệp để nhận lời chúc đặc biệt!</p>
+    </div>
+
+    <!-- Icon trái tim -->
+    <i class="fas fa-heart heart heart1"></i>
+    <i class="fas fa-heart heart heart2"></i>
+    <i class="fas fa-heart heart heart3"></i>
+    <i class="fas fa-heart heart heart4"></i>
+    <i class="fas fa-heart heart heart5"></i>
+    <i class="fas fa-heart heart heart6"></i>
+    <i class="fas fa-heart heart heart7"></i>
+    <i class="fas fa-heart heart heart8"></i>
+    <i class="fas fa-heart heart heart9"></i>
+    <i class="fas fa-heart heart heart10"></i>
+
+    <!-- Modals -->
+    <div class="modal" id="wish-modal-1">
+        <div class="modal-content">
+            <h2>Lời Chúc 1</h2>
+            <p>Chào cô gái của anh!</p>
+            <button class="next-btn" data-modal="wish-modal-2">Tiếp theo</button>
+        </div>
+    </div>
+
+    <div class="modal" id="wish-modal-2">
+        <div class="modal-content">
+            <h2>Lời Chúc 2</h2>
+            <p>Hôm nay là ngày 20-10 xin gửi lời chúc đến người anh yêu thương nhất!</p>
+            <button class="next-btn" data-modal="wish-modal-3">Tiếp theo</button>
+        </div>
+    </div>
+
+    <div class="modal" id="wish-modal-3">
+        <div class="modal-content">
+            <h2>Lời Chúc 3</h2>
+            <p>Chúc em luôn vui vẻ luôn hạnh phúc!</p>
+            <button class="next-btn" data-modal="wish-modal-4">Tiếp theo</button>
+        </div>
+    </div>
+
+    <div class="modal" id="wish-modal-4">
+        <div class="modal-content">
+            <h2>Lời Chúc 4</h2>
+            <p>Luôn đầy ắp tiếng cười và lạc quan trong cuộc sống!</p>
+            <button class="next-btn" data-modal="wish-modal-5">Tiếp theo</button>
+        </div>
+    </div>
+
+    <div class="modal" id="wish-modal-5">
+        <div class="modal-content">
+            <h2>Lời Chúc 5</h2>
+            <p>Chúc em sẽ đạt được những ước mơ và dự định của mình trong tương lai!</p>
+            <button class="next-btn" data-modal="wish-modal-6">Tiếp theo</button>
+        </div>
+    </div>
+
+    <div class="modal" id="wish-modal-6">
+        <div class="modal-content">
+            <h2>Lời Chúc 6</h2>
+            <p>Cảm ơn em đã luôn đồng hành cùng anh và cảm thông cho anh!</p>
+            <button class="next-btn" data-modal="wish-modal-7">Tiếp theo</button>
+        </div>
+    </div>
+
+    <div class="modal" id="wish-modal-7">
+        <div class="modal-content">
+            <h2>Lời Chúc Cuối Cùng</h2>
+            <p>Yêu em(<~>)</p>
+            <button class="next-btn" id="close-modal">Đóng</button>
+        </div>
+    </div>
+
+    <!-- Trang lời chúc đặc biệt -->
+    <div class="special-message" id="special-message">
+        <img src="./z5947393499319_6d82107db512859aa6be638911043f79.jpg" alt="Chúc mừng">
+        <h2>Chúc em một ngày 20-10 thật hạnh phúc!</h2>
+        <button id="back-to-card" class="next-btn">Quay lại thiệp</button>
+    </div>
+
+    <script>
+        const openCard = document.getElementById('open-card');
+        const wishModals = document.querySelectorAll('.modal');
+        const closeModal = document.getElementById('close-modal');
+        const specialMessage = document.getElementById('special-message');
+        const backToCard = document.getElementById('back-to-card');
+
+        openCard.addEventListener('click', function() {
+            this.classList.toggle('opened');
+            document.querySelector('.message').style.display = 'block';
+            showModal('wish-modal-1'); // Hiện modal đầu tiên
+        });
+
+        function showModal(modalId) {
+            wishModals.forEach(modal => {
+                modal.style.display = 'none'; // Ẩn tất cả modal
+            });
+            specialMessage.style.display = 'none'; // Ẩn trang chúc đặc biệt
+            document.getElementById(modalId).style.display = 'flex'; // Hiện modal được chỉ định
+        }
+
+        wishModals.forEach(modal => {
+            const nextButton = modal.querySelector('.next-btn');
+            if (nextButton) {
+                nextButton.addEventListener('click', function() {
+                    const nextModalId = this.getAttribute('data-modal');
+                    if (nextModalId) {
+                        showModal(nextModalId); // Hiện modal tiếp theo
+                    }
+                });
+            }
+        });
+
+        closeModal.addEventListener('click', function() {
+            wishModals.forEach(modal => {
+                modal.style.display = 'none'; // Ẩn tất cả modal
+            });
+            specialMessage.style.display = 'flex'; // Hiện trang chúc đặc biệt
+        });
+
+        backToCard.addEventListener('click', function() {
+            specialMessage.style.display = 'none'; // Ẩn trang chúc đặc biệt
+            openCard.classList.remove('opened');
+            document.querySelector('.message').style.display = 'none'; // Ẩn thông điệp
+        });
+    </script>
+</body>
+</html>
